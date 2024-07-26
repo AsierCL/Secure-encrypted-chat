@@ -1,7 +1,7 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 
-void initialize_network(const char *client_ip);
+void initialize_network(const char *client_ip, int port);
 void send_message(const char *message);
 void receive_message(char *buffer);
 void cleanup_network();

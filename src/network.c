@@ -7,15 +7,15 @@
 
 #include "../include/crypto.h"
 
-#define PORT 12345
+
 
 int sock;
 struct sockaddr_in server_addr, client_addr;
 
-void initialize_network(const char *client_ip) {
+void initialize_network(const char *client_ip, int port) {
     sock = socket(AF_INET, SOCK_DGRAM, 0);
     if (sock < 0) {
-        perror("Socket creation failed");
+        perror("\x1b[31m\nSocket creation failed\x1b[0m\n");
         exit(EXIT_FAILURE);
     }
 
@@ -24,19 +24,19 @@ void initialize_network(const char *client_ip) {
     memset(&client_addr, 0, sizeof(client_addr));
     
     server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(PORT); 
+    server_addr.sin_port = htons(port); 
     server_addr.sin_addr.s_addr = INADDR_ANY;
 
     client_addr.sin_family = AF_INET;
-    client_addr.sin_port = htons(PORT);
+    client_addr.sin_port = htons(port);
     if (inet_pton(AF_INET, client_ip, &client_addr.sin_addr) <= 0) {
-        perror("Invalid client IP address");
+        printf("\x1b[31m\nInvalid client IP address\x1b[0m\n");
         exit(EXIT_FAILURE);
     }
 
     // Enlazar el socket al servidor
     if (bind(sock, (const struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
-        perror("Bind failed");
+        printf("\x1b[31m\nBind failed\x1b[0m\n");
         exit(EXIT_FAILURE);
     }
 }
@@ -65,7 +65,7 @@ void* send_thread(void* arg) {
     char message[256];
     char encrypted_message[256];
     while (1) {
-        printf("You: ");
+        printf("\x1b[32mYou: ");
         fgets(message, sizeof(message), stdin);
         
         EncryptMessage(message, encrypted_message);
@@ -85,8 +85,8 @@ void* receive_thread(void* arg) {
         if (strlen(message) > 0) {
             printf("\33[2K");
             printf("\033[A");
-            printf("\nReceived: %s", message);
-            printf("You: ");
+            printf("\n\x1b[34mReceived: %s", message);
+            printf("\x1b[32mYou: ");
             fflush(stdout);
         }
     }
