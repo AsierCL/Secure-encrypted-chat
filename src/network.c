@@ -30,6 +30,12 @@ void initialize_network(const char *client_ip) {
         perror("Invalid client IP address");
         exit(EXIT_FAILURE);
     }
+
+    // Enlazar el socket al servidor
+    if (bind(sock, (const struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
+        perror("Bind failed");
+        exit(EXIT_FAILURE);
+    }
 }
 
 
@@ -67,7 +73,8 @@ void* receive_thread(void* arg) {
     while (1) {
         receive_message(message);
         if (strlen(message) > 0) {
-            printf("Received: %s\n", message);
+            printf("\nReceived: %s", message);
+            printf("You: ");
             fflush(stdout);
         }
     }
