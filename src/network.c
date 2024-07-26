@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <termios.h>
 
+#include "../include/crypto.h"
+
 #define PORT 12345
 
 int sock;
@@ -61,10 +63,13 @@ void cleanup_network() {
 
 void* send_thread(void* arg) {
     char message[256];
+    char encrypted_message[256];
     while (1) {
         printf("You: ");
         fgets(message, sizeof(message), stdin);
-        send_message(message);
+        
+        EncryptMessage(message, encrypted_message);
+        send_message(encrypted_message);
     }
     return NULL;
 }
@@ -73,17 +78,16 @@ void* send_thread(void* arg) {
 
 void* receive_thread(void* arg) {
     char message[256];
-    char current_line[256];
+    char encrypted_message[256];
     while (1) {
-        receive_message(message);
+        receive_message(encrypted_message);
+        DecryptMessage(encrypted_message, message);
         if (strlen(message) > 0) {
-            // Mueve el cursor hacia arriba para sobrescribir la línea anterior
             printf("\33[2K");
             printf("\033[A");
             printf("\nReceived: %s", message);
             printf("You: ");
             fflush(stdout);
-            printf("%s",current_line);
         }
     }
     return NULL;
