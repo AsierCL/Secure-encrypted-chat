@@ -3,6 +3,7 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <termios.h>
 
 #define PORT 12345
 
@@ -68,14 +69,21 @@ void* send_thread(void* arg) {
     return NULL;
 }
 
+
+
 void* receive_thread(void* arg) {
     char message[256];
+    char current_line[256];
     while (1) {
         receive_message(message);
         if (strlen(message) > 0) {
+            // Mueve el cursor hacia arriba para sobrescribir la línea anterior
+            printf("\33[2K");
+            printf("\033[A");
             printf("\nReceived: %s", message);
             printf("You: ");
             fflush(stdout);
+            printf("%s",current_line);
         }
     }
     return NULL;
