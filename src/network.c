@@ -34,7 +34,6 @@ void initialize_network(const char *client_ip, int port) {
         exit(EXIT_FAILURE);
     }
 
-    // Enlazar el socket al servidor
     if (bind(sock, (const struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
         printf("\x1b[31m\nBind failed\x1b[0m\n");
         exit(EXIT_FAILURE);
