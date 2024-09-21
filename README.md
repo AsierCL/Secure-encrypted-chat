@@ -2,8 +2,9 @@
 
 This is a simple live chat application implemented in C. It allows two users to communicate over a network using UDP sockets. The messages are encrypted using a basic XOR encryption for demonstration purposes. This may be updated and improved in the future.
 
-#### **Disclaimer**
-Please note again that the encryption method (XOR) is for demonstration purposes only. __It is not a secure encryption__, and should not be used in production due to its weak security.
+> [!CAUTION]
+> Please note again that the encryption method (XOR) is for demonstration purposes only. __It is not a secure encryption__, and should not be used in production due to its weak security.
+
 
 ## Files Description
 
